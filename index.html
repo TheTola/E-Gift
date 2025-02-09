@@ -1,249 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eGift Card</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #121212; /* Dark mode */
-            perspective: 1000px;
-            touch-action: manipulation; /* Prevents accidental double taps */
+<script>
+    const card = document.getElementById('card');
+    const leftHalf = document.getElementById('left-half');
+    const rightHalf = document.getElementById('right-half');
+    const flipSound = document.getElementById('flipSound');
+    const unfurlSound = document.getElementById('unfurlSound');
+    const readButton = document.getElementById('readButton');
+    const fullscreen = document.getElementById('fullscreen');
+    const closeButton = document.getElementById('closeButton');
+
+    let flipped = false;
+
+    function playFlipSound() {
+        flipSound.currentTime = 0;
+        flipSound.play();
+    }
+
+    function flipCard() {
+        flipped = !flipped;
+        card.classList.toggle('flipped', flipped);
+        playFlipSound();
+        readButton.style.display = flipped ? "block" : "none";
+    }
+
+    readButton.addEventListener('click', () => {
+        fullscreen.style.display = "block";
+
+        if (unfurlSound) {
+            unfurlSound.pause(); // Stop any existing playback
+            unfurlSound.currentTime = 0; // Start from the beginning
+            unfurlSound.playbackRate = 2.8; // Speed up by 2.8x
+            unfurlSound.play().catch(error => console.log("Audio playback error:", error));
+            
+            // Stop after 3 seconds
+            setTimeout(() => {
+                unfurlSound.pause();
+                unfurlSound.currentTime = 0; // Reset to the beginning
+            }, 3000);
         }
-
-        .card-container {
-            width: 500px;
-            height: 700px;
-            position: relative;
-        }
-
-        .card {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            transform-style: preserve-3d;
-            transition: transform 0.8s ease-in-out;
-            animation: spin 2s linear;
-            box-shadow: 0px 8px 20px rgba(255, 255, 255, 0.1);
-        }
-
-        @keyframes spin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(720deg); }
-        }
-
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .side {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            border-radius: 12px;
-            box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.15);
-            backface-visibility: hidden;
-        }
-
-        .front {
-            background: url('Ecard/eGift.png') center/cover no-repeat;
-            background-color: #1e1e1e;
-            border: 2px solid #ffffff20;
-        }
-
-        .back {
-            background: url('Ecard/eLetter.png') center/cover no-repeat;
-            background-color: #1e1e1e;
-            transform: rotateY(180deg);
-            border: 2px solid #ffffff20;
-        }
-
-        /* Read Button */
-        .read-button {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #ffffff;
-            color: #121212;
-            border: none;
-            padding: 10px 18px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            z-index: 4;
-            display: none;
-            touch-action: manipulation;
-        }
-
-        /* Fullscreen Transcript View */
-        .fullscreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('Ecard/eBack.png') center/cover no-repeat;
-            background-color: rgba(255, 255, 255, 1);
-            z-index: 10;
-            display: none;
-            padding: 50px;
-            color: black;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .transcript-content {
-            max-width: 800px;
-            margin: auto;
-            font-size: 18px;
-            line-height: 1.6;
-            color: black;
-            pointer-events: none; /* Makes the text unclickable */
-            background: transparent; /* Fully transparent */
-            padding: 0;
-            text-align: center;
-        }
-
-        .left-align {
-            text-align: left;
-            margin-top: 20px;
-            color: black;
-        }
-
-        /* Close Button */
-        .close-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: black;
-            color: white;
-            border: none;
-            font-size: 20px;
-            padding: 10px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            z-index: 11;
-            touch-action: manipulation;
-        }
-
-        .left-half, .right-half {
-            position: absolute;
-            height: 100%;
-            top: 0;
-        }
-
-        .left-half {
-            left: 0;
-            width: 49.5%;
-        }
-
-        .right-half {
-            right: 0;
-            width: 50.5%;
-        }
-
-        /* Mobile-Friendly Scaling */
-        @media (max-width: 600px) {
-            .card-container {
-                width: 350px;
-                height: 490px;
-            }
-
-            .fullscreen {
-                padding: 20px; /* Adjust padding for small screens */
-            }
-
-            .transcript-content {
-                font-size: 16px; /* Make text smaller for mobile */
-            }
-
-            .close-button {
-                top: 10px;
-                right: 10px;
-                font-size: 18px;
-                padding: 8px 12px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="card-container">
-        <div class="card" id="card">
-            <div class="side front"></div>
-            <div class="side back">
-                <button class="read-button" id="readButton">Read</button>
-            </div>
-        </div>
-
-        <div class="left-half" id="left-half"></div>
-        <div class="right-half" id="right-half"></div>
-    </div>
-
-    <!-- Fullscreen Transcript View -->
-    <div class="fullscreen" id="fullscreen">
-        <button class="close-button" id="closeButton">X</button>
-        <div class="transcript-content">
-            <p><strong>Hey Nancy,</strong></p>
-            <p>Hope you're doing great! Just wanted to send some well wishes your way.</p>
-            <p>I really appreciate the gift you gave me during The Gathering—it meant a lot.</p>
-            <p>More than that, I’m grateful for the time we spent together. It was awesome getting to know you.</p>
-            <p>Wishing you all the best in everything ahead, especially your IT internship. You’ve got this!</p>
-            <p>Take care,</p>
-            <p><strong>Tola</strong></p>
-        </div>
-    </div>
-
-    <!-- Audio Elements -->
-    <audio id="flipSound" src="Ecard/flip-sound.mp3"></audio>
-    <audio id="unfurlSound" src="Ecard/Unfurl.mp3"></audio>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const card = document.getElementById('card');
-        const leftHalf = document.getElementById('left-half');
-        const rightHalf = document.getElementById('right-half');
-        const flipSound = document.getElementById('flipSound');
-        const unfurlSound = document.getElementById('unfurlSound');
-        const readButton = document.getElementById('readButton');
-        const fullscreen = document.getElementById('fullscreen');
-        const closeButton = document.getElementById('closeButton');
-
-        let flipped = false;
-
-        function playFlipSound() {
-            flipSound.currentTime = 0;
-            flipSound.play();
-        }
-
-        function flipCard() {
-            flipped = !flipped;
-            card.classList.toggle('flipped', flipped);
-            playFlipSound();
-            readButton.style.display = flipped ? "block" : "none";
-        }
-
-        readButton.addEventListener('click', () => {
-            fullscreen.style.display = "block";
-            unfurlSound.pause();
-            unfurlSound.currentTime = 0;
-            unfurlSound.playbackRate = 2.8;
-            unfurlSound.play();
-            setTimeout(() => unfurlSound.pause(), 3000);
-        });
-
-        closeButton.addEventListener('click', () => fullscreen.style.display = "none");
-        fullscreen.addEventListener('click', () => fullscreen.style.display = "none");
-        leftHalf.addEventListener('click', flipCard);
-        rightHalf.addEventListener('click', flipCard);
     });
-    </script>
 
-</body>
-</html>
+    closeButton.addEventListener('click', () => fullscreen.style.display = "none");
+    fullscreen.addEventListener('click', () => fullscreen.style.display = "none");
+
+    leftHalf.addEventListener('click', flipCard);
+    rightHalf.addEventListener('click', flipCard);
+</script>
