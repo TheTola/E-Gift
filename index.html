@@ -91,24 +91,22 @@
             background-color: rgba(255, 255, 255, 1);
             z-index: 10;
             display: none;
-            padding: 30px;
+            padding: 50px;
             color: black;
             font-family: Arial, sans-serif;
             text-align: center;
             cursor: pointer;
-            overflow-y: auto; /* Enables scrolling for long content */
         }
 
-        /* ✅ FIXED: Dynamic Word-Wrapping */
         .transcript-content {
-            max-width: 90%;
+            max-width: 800px;
             margin: auto;
             font-size: 18px;
             line-height: 1.6;
             color: black;
-            word-wrap: break-word; /* Ensures text wraps properly */
-            white-space: normal;
-            padding: 10px;
+            pointer-events: none; /* Makes the text unclickable */
+            background: transparent; /* Fully transparent */
+            padding: 0;
             text-align: center;
         }
 
@@ -116,8 +114,6 @@
             text-align: left;
             margin-top: 20px;
             color: black;
-            word-wrap: break-word;
-            white-space: normal;
         }
 
         /* Close Button */
@@ -160,12 +156,11 @@
             }
 
             .fullscreen {
-                padding: 20px;
+                padding: 20px; /* Adjust padding for small screens */
             }
 
             .transcript-content {
-                font-size: 16px;
-                max-width: 95%;
+                font-size: 16px; /* Make text smaller for mobile */
             }
 
             .close-button {
@@ -202,14 +197,6 @@
             <p>Wishing you all the best in everything ahead, especially your IT internship. You’ve got this!</p>
             <p>Take care,</p>
             <p><strong>Tola</strong></p>
-
-            <div class="left-align">
-                <p><strong>Nancy (Grace)</strong> - 2 Corinthians 12:9</p>
-                <p>"But he said to me, ‘My grace is sufficient for you, for my power is made perfect in weakness.’"</p>
-
-                <p><strong>Soriano (Noble)</strong> - Ruth 3:11</p>
-                <p>"And now, my daughter, don’t be afraid. I will do for you all you ask. All the people of my town know that you are a woman of noble character."</p>
-            </div>
         </div>
     </div>
 
@@ -242,7 +229,15 @@
             readButton.style.display = flipped ? "block" : "none";
         }
 
-        readButton.addEventListener('click', () => fullscreen.style.display = "block");
+        readButton.addEventListener('click', () => {
+            fullscreen.style.display = "block";
+            unfurlSound.pause();
+            unfurlSound.currentTime = 0;
+            unfurlSound.playbackRate = 2.8;
+            unfurlSound.play();
+            setTimeout(() => unfurlSound.pause(), 3000);
+        });
+
         closeButton.addEventListener('click', () => fullscreen.style.display = "none");
         fullscreen.addEventListener('click', () => fullscreen.style.display = "none");
         leftHalf.addEventListener('click', flipCard);
