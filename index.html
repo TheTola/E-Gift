@@ -207,15 +207,16 @@
         </div>
     </div>
 
-    <!-- Flip Sound -->
+    <!-- Audio Elements -->
     <audio id="flipSound" src="Ecard/flip-sound.mp3"></audio>
-
+    <audio id="unfurlSound" src="Ecard/Unfurl.mp3"></audio>
 
     <script>
         const card = document.getElementById('card');
         const leftHalf = document.getElementById('left-half');
         const rightHalf = document.getElementById('right-half');
         const flipSound = document.getElementById('flipSound');
+        const unfurlSound = document.getElementById('unfurlSound');
         const readButton = document.getElementById('readButton');
         const fullscreen = document.getElementById('fullscreen');
         const closeButton = document.getElementById('closeButton');
@@ -234,7 +235,12 @@
             readButton.style.display = flipped ? "block" : "none";
         }
 
-        readButton.addEventListener('click', () => fullscreen.style.display = "block");
+        readButton.addEventListener('click', () => {
+            fullscreen.style.display = "block";
+            unfurlSound.currentTime = 0;
+            unfurlSound.play();
+        });
+
         closeButton.addEventListener('click', () => fullscreen.style.display = "none");
         fullscreen.addEventListener('click', () => fullscreen.style.display = "none");
 
