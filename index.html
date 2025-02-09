@@ -91,22 +91,24 @@
             background-color: rgba(255, 255, 255, 1);
             z-index: 10;
             display: none;
-            padding: 50px;
+            padding: 30px;
             color: black;
             font-family: Arial, sans-serif;
             text-align: center;
             cursor: pointer;
+            overflow-y: auto; /* Enables scrolling for long content */
         }
 
+        /* ✅ FIXED: Dynamic Word-Wrapping */
         .transcript-content {
-            max-width: 800px;
+            max-width: 90%;
             margin: auto;
             font-size: 18px;
             line-height: 1.6;
             color: black;
-            pointer-events: none; /* Makes the text unclickable */
-            background: transparent; /* Fully transparent */
-            padding: 0;
+            word-wrap: break-word; /* Ensures text wraps properly */
+            white-space: normal;
+            padding: 10px;
             text-align: center;
         }
 
@@ -114,6 +116,8 @@
             text-align: left;
             margin-top: 20px;
             color: black;
+            word-wrap: break-word;
+            white-space: normal;
         }
 
         /* Close Button */
@@ -156,11 +160,12 @@
             }
 
             .fullscreen {
-                padding: 20px; /* Adjust padding for small screens */
+                padding: 20px;
             }
 
             .transcript-content {
-                font-size: 16px; /* Make text smaller for mobile */
+                font-size: 16px;
+                max-width: 95%;
             }
 
             .close-button {
@@ -192,7 +197,8 @@
         <div class="transcript-content">
             <p><strong>Hey Nancy,</strong></p>
             <p>Hope you're doing great! Just wanted to send some well wishes your way.</p>
-            <p>I really appreciate the gift you gave me during The Gathering—it meant a lot. More than that, I’m grateful for the time we spent together. It was awesome getting to know you, and I hope we cross paths again.</p>
+            <p>I really appreciate the gift you gave me during The Gathering—it meant a lot.</p>
+            <p>More than that, I’m grateful for the time we spent together. It was awesome getting to know you.</p>
             <p>Wishing you all the best in everything ahead, especially your IT internship. You’ve got this!</p>
             <p>Take care,</p>
             <p><strong>Tola</strong></p>
@@ -236,15 +242,7 @@
             readButton.style.display = flipped ? "block" : "none";
         }
 
-        readButton.addEventListener('click', () => {
-            fullscreen.style.display = "block";
-            unfurlSound.pause();
-            unfurlSound.currentTime = 0;
-            unfurlSound.playbackRate = 2.8;
-            unfurlSound.play();
-            setTimeout(() => unfurlSound.pause(), 3000);
-        });
-
+        readButton.addEventListener('click', () => fullscreen.style.display = "block");
         closeButton.addEventListener('click', () => fullscreen.style.display = "none");
         fullscreen.addEventListener('click', () => fullscreen.style.display = "none");
         leftHalf.addEventListener('click', flipCard);
