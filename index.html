@@ -212,6 +212,7 @@
     <audio id="unfurlSound" src="Ecard/Unfurl.mp3"></audio>
 
     <script>
+    document.addEventListener("DOMContentLoaded", function () {
         const card = document.getElementById('card');
         const leftHalf = document.getElementById('left-half');
         const rightHalf = document.getElementById('right-half');
@@ -237,15 +238,18 @@
 
         readButton.addEventListener('click', () => {
             fullscreen.style.display = "block";
+            unfurlSound.pause();
             unfurlSound.currentTime = 0;
+            unfurlSound.playbackRate = 2.8;
             unfurlSound.play();
+            setTimeout(() => unfurlSound.pause(), 3000);
         });
 
         closeButton.addEventListener('click', () => fullscreen.style.display = "none");
         fullscreen.addEventListener('click', () => fullscreen.style.display = "none");
-
         leftHalf.addEventListener('click', flipCard);
         rightHalf.addEventListener('click', flipCard);
+    });
     </script>
 
 </body>
