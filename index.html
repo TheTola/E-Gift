@@ -192,18 +192,11 @@
         <div class="transcript-content">
             <p><strong>Hey Nancy,</strong></p>
             <p>Hope you're doing great! Just wanted to send some well wishes your way.</p>
-            <p>I really appreciate the gift you gave me during The Gathering—it meant a lot. More than that, I’m grateful for the time we spent together. It was awesome getting to know you, and I hope we cross paths again.</p>
+            <p>I really appreciate the gift you gave me during The Gathering—it meant a lot.</p>
+            <p>More than that, I’m grateful for the time we spent together. It was awesome getting to know you.</p>
             <p>Wishing you all the best in everything ahead, especially your IT internship. You’ve got this!</p>
             <p>Take care,</p>
             <p><strong>Tola</strong></p>
-
-            <div class="left-align">
-                <p><strong>Nancy (Grace)</strong> - 2 Corinthians 12:9</p>
-                <p>"But he said to me, ‘My grace is sufficient for you, for my power is made perfect in weakness.’"</p>
-
-                <p><strong>Soriano (Noble)</strong> - Ruth 3:11</p>
-                <p>"And now, my daughter, don’t be afraid. I will do for you all you ask. All the people of my town know that you are a woman of noble character."</p>
-            </div>
         </div>
     </div>
 
@@ -212,57 +205,44 @@
     <audio id="unfurlSound" src="Ecard/Unfurl.mp3"></audio>
 
     <script>
-    const card = document.getElementById('card');
-    const leftHalf = document.getElementById('left-half');
-    const rightHalf = document.getElementById('right-half');
-    const flipSound = document.getElementById('flipSound');
-    const unfurlSound = document.getElementById('unfurlSound');
-    const readButton = document.getElementById('readButton');
-    const fullscreen = document.getElementById('fullscreen');
-    const closeButton = document.getElementById('closeButton');
+    document.addEventListener("DOMContentLoaded", function () {
+        const card = document.getElementById('card');
+        const leftHalf = document.getElementById('left-half');
+        const rightHalf = document.getElementById('right-half');
+        const flipSound = document.getElementById('flipSound');
+        const unfurlSound = document.getElementById('unfurlSound');
+        const readButton = document.getElementById('readButton');
+        const fullscreen = document.getElementById('fullscreen');
+        const closeButton = document.getElementById('closeButton');
 
-    let flipped = false;
+        let flipped = false;
 
-    function playFlipSound() {
-        flipSound.currentTime = 0;
-        flipSound.play();
-    }
+        function playFlipSound() {
+            flipSound.currentTime = 0;
+            flipSound.play();
+        }
 
-    function flipCard() {
-        flipped = !flipped;
-        card.classList.toggle('flipped', flipped);
-        playFlipSound();
-        readButton.style.display = flipped ? "block" : "none";
-    }
+        function flipCard() {
+            flipped = !flipped;
+            card.classList.toggle('flipped', flipped);
+            playFlipSound();
+            readButton.style.display = flipped ? "block" : "none";
+        }
 
-    readButton.addEventListener('click', () => {
-        fullscreen.style.display = "block";
-
-        unfurlSound.currentTime = 0; // Start from the beginning
-        unfurlSound.playbackRate = 2.8; // Speed up by 2.8x
-
-        unfurlSound.play().catch(error => console.log("Audio playback error:", error));
-
-        // Stop after 3 seconds
-        setTimeout(() => {
+        readButton.addEventListener('click', () => {
+            fullscreen.style.display = "block";
             unfurlSound.pause();
-            unfurlSound.currentTime = 0; // Reset to the beginning
-        }, 3000); // 3 seconds (3000 ms)
-    });
-
-    closeButton.addEventListener('click', () => fullscreen.style.display = "none");
-    fullscreen.addEventListener('click', () => fullscreen.style.display = "none");
-
-    leftHalf.addEventListener('click', flipCard);
-    rightHalf.addEventListener('click', flipCard);
-</script>
-
+            unfurlSound.currentTime = 0;
+            unfurlSound.playbackRate = 2.8;
+            unfurlSound.play();
+            setTimeout(() => unfurlSound.pause(), 3000);
+        });
 
         closeButton.addEventListener('click', () => fullscreen.style.display = "none");
         fullscreen.addEventListener('click', () => fullscreen.style.display = "none");
-
         leftHalf.addEventListener('click', flipCard);
         rightHalf.addEventListener('click', flipCard);
+    });
     </script>
 
 </body>
